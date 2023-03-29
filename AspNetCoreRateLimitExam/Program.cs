@@ -18,8 +18,9 @@ builder.Services.AddOptions();
 //Cache servisi ekliyoruz.Örn dakikada 50 request yapabiliyor olacaðýmýz zaman, 50 requesti ram'de tutacaðýz.
 builder.Services.AddMemoryCache();
 
+builder.Services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
 // Ip adresi ile ilgili izinleri belirleyeceðimiz appsettings içerisine key vereceðiz.
-builder.Services.Configure<IpRateLimitOptions>(configuration.GetSection("IPRateLimit"));
+builder.Services.Configure<IpRateLimitOptions>(configuration.GetSection("IPRateLimiting"));
 
 //Policy belirtiyoruz.
 builder.Services.Configure<IpRateLimitPolicies>(configuration.GetSection("IPRateLimitPolicies"));
@@ -35,7 +36,14 @@ builder.Services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounte
 //Request yapanýn ip adresini, header bilgisini okuyabilmesi için IHttpContextAccessor'u implemente etmemiz gerekiyor.
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+//RateLimit ana servisini ekliyoruz.
+builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+
+
 var app = builder.Build();
+
+//Aþaðýdaki taným, Service alanýnda tanýmlamýþ olduðumuz özellikleri kullanarak ip adresi üzerinden kýsýtlama ekleyecek.
+app.UseIpRateLimiting();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
