@@ -45,6 +45,7 @@ var app = builder.Build();
 //Aþaðýdaki taným, Service alanýnda tanýmlamýþ olduðumuz özellikleri kullanarak ip adresi üzerinden kýsýtlama ekleyecek.
 app.UseIpRateLimiting();
 
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
