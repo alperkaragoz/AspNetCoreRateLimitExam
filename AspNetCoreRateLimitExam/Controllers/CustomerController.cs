@@ -7,9 +7,15 @@ namespace AspNetCoreRateLimitExam.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
+        [HttpGet]
         public IActionResult GetCustomer()
         {
-            return Ok(new {Id=1,Name="Alper"});
+            return Ok(new { Id = 1, Name = "Alper" });
+        }
+        [HttpPost]
+        public IActionResult CreateCustomer()
+        {
+            return Ok(new { StatusCode = 200 });
         }
     }
 }
