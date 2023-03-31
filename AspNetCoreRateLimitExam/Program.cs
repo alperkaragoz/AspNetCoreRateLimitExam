@@ -6,7 +6,6 @@ var provider = builder.Services.BuildServiceProvider();
 var configuration = provider.GetRequiredService<IConfiguration>();
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -41,6 +40,12 @@ builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>()
 
 
 var app = builder.Build();
+
+//GetService kullanýldýðýnda ilgili servis yoksa geriye null döner, GetRequiredService kullanýldýðýnda ilgili servis yoksa hata fýrlatýr.
+var ipPolicy = app.Services.GetRequiredService<IIpPolicyStore>();
+//Bu method appsettings.json içerisindeki policy'leri uygulamayý saðlýyor.
+//Wait metodu ilgili satýrdan sonuç gelinceye kadar bekliyor, diðer satýra geçmiyor.
+ipPolicy.SeedAsync().Wait();
 
 //Aþaðýdaki taným, Service alanýnda tanýmlamýþ olduðumuz özellikleri kullanarak ip adresi üzerinden kýsýtlama ekleyecek.
 app.UseIpRateLimiting();

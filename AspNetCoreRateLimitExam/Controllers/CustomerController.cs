@@ -17,5 +17,10 @@ namespace AspNetCoreRateLimitExam.Controllers
         {
             return Ok(new { StatusCode = 200 });
         }
+        [HttpPut]
+        public IActionResult UpdateCustomer()
+        {
+            return Ok();
+        }
     }
 }
