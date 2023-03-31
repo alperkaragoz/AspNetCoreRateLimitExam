@@ -18,16 +18,30 @@ builder.Services.AddOptions();
 builder.Services.AddMemoryCache();
 
 builder.Services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
+
+
+//// Ip adresi ile ilgili izinleri belirleyeceðimiz appsettings içerisine key vereceðiz.
+//builder.Services.Configure<IpRateLimitOptions>(configuration.GetSection("IPRateLimiting"));
+
+
 // Ip adresi ile ilgili izinleri belirleyeceðimiz appsettings içerisine key vereceðiz.
-builder.Services.Configure<IpRateLimitOptions>(configuration.GetSection("IPRateLimiting"));
+builder.Services.Configure<ClientRateLimitOptions>(configuration.GetSection("ClientRateLimiting"));
 
-//Policy belirtiyoruz.
-builder.Services.Configure<IpRateLimitPolicies>(configuration.GetSection("IPRateLimitPolicies"));
 
-//Uygulama çalýþtýðýnda bir kere yüklenmesini,bir daha nesne örneði alýnmasýný istemiyoruz.
-builder.Services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
+////Policy belirtiyoruz.(Ip için)
+//builder.Services.Configure<IpRateLimitPolicies>(configuration.GetSection("IPRateLimitPolicies"));
+
+
+////Policy belirtiyoruz.(Client için)
+builder.Services.Configure<ClientRateLimitPolicies>(configuration.GetSection("ClientRateLimitPolicies"));
+
+//Uygulama çalýþtýðýnda bir kere yüklenmesini,bir daha nesne örneði alýnmasýný istemiyoruz.(Ip rate limit için)
+//builder.Services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
 // Eðer docker kullanýyorsak DistributeCache kullanmamýz gerekiyor.(DistributedCacheIpPolicyStore).Eðer kullanmaz isek request sayýlarý o uygulamanýn ayaða kalkmýþ olduðu
 //memory'de tutulacaðýndan dolayý tutarsýz olacaktýr.
+
+//Uygulama çalýþtýðýnda bir kere yüklenmesini,bir daha nesne örneði alýnmasýný istemiyoruz.(Client rate limit için)
+builder.Services.AddSingleton<IClientPolicyStore, MemoryCacheClientPolicyStore>();
 
 //Kaç request yapýldýðý verilerin tutulacaðý yer belirtiyoruz.
 builder.Services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
@@ -41,14 +55,22 @@ builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>()
 
 var app = builder.Build();
 
-//GetService kullanýldýðýnda ilgili servis yoksa geriye null döner, GetRequiredService kullanýldýðýnda ilgili servis yoksa hata fýrlatýr.
-var ipPolicy = app.Services.GetRequiredService<IIpPolicyStore>();
+//GetService kullanýldýðýnda ilgili servis yoksa geriye null döner, GetRequiredService kullanýldýðýnda ilgili servis yoksa hata fýrlatýr.(Ip için)
+//var ipPolicy = app.Services.GetRequiredService<IIpPolicyStore>();
 //Bu method appsettings.json içerisindeki policy'leri uygulamayý saðlýyor.
 //Wait metodu ilgili satýrdan sonuç gelinceye kadar bekliyor, diðer satýra geçmiyor.
-ipPolicy.SeedAsync().Wait();
 
-//Aþaðýdaki taným, Service alanýnda tanýmlamýþ olduðumuz özellikleri kullanarak ip adresi üzerinden kýsýtlama ekleyecek.
-app.UseIpRateLimiting();
+
+//var ipPolicy = app.Services.GetRequiredService<IClientPolicyStore>();// (Client için)
+
+
+//ipPolicy.SeedAsync().Wait();
+
+////Aþaðýdaki taným, Service alanýnda tanýmlamýþ olduðumuz özellikleri kullanarak ip adresi üzerinden kýsýtlama ekleyecek. (Ip rate limit için)
+//app.UseIpRateLimiting();
+
+//Aþaðýdaki taným, Service alanýnda tanýmlamýþ olduðumuz özellikleri kullanarak client üzerinden kýsýtlama ekleyecek. (Client rate limit için)
+app.UseClientRateLimiting();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

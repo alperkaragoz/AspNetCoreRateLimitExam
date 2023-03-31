@@ -12,6 +12,12 @@ namespace AspNetCoreRateLimitExam.Controllers
         {
             return Ok(new { Id = 1, Name = "Alper" });
         }
+        [HttpGet("{name}")]
+        public IActionResult GetCustomer(string name)
+        {
+            return Ok(name);
+        }
+
         [HttpPost]
         public IActionResult CreateCustomer()
         {
