@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33502.453
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreRateLimitExam", "AspNetCoreRateLimitExam\AspNetCoreRateLimitExam.csproj", "{951FF6F7-37A1-43F2-A846-D354CD194279}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreRateLimitExam", "AspNetCoreRateLimitExam\AspNetCoreRateLimitExam.csproj", "{951FF6F7-37A1-43F2-A846-D354CD194279}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmidgeApp.Web", "..\..\SmidgeApp.Web\SmidgeApp.Web.csproj", "{2BB8D769-EB55-4332-B646-EC7DEDFC35DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{951FF6F7-37A1-43F2-A846-D354CD194279}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{951FF6F7-37A1-43F2-A846-D354CD194279}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{951FF6F7-37A1-43F2-A846-D354CD194279}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BB8D769-EB55-4332-B646-EC7DEDFC35DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BB8D769-EB55-4332-B646-EC7DEDFC35DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BB8D769-EB55-4332-B646-EC7DEDFC35DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BB8D769-EB55-4332-B646-EC7DEDFC35DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
